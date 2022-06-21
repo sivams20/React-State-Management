@@ -1,4 +1,4 @@
-import { cleanup, findByTestId, getByTestId, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
@@ -11,7 +11,12 @@ const mockStore = configureMockStore();
 });
 
 describe('CakeContainer Component', () => {
+
   afterEach(cleanup);
+
+  test('should load without crash', () => {
+    render(<Provider store={store}><CakeContainer/></Provider>);
+  });
 
   test('Check whether the button is available', async () => {
     render(<Provider store={store}><CakeContainer/></Provider>);

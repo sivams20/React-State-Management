@@ -5,8 +5,6 @@ import { fetchUsers } from "../redux/user/userActions";
 function UserContainer(){
 
     const value = useSelector(state => state);
-    console.log(value);
-
     const dispatch = useDispatch();
     const users = useSelector(state => state.user.users);
     const loading = useSelector(state => state.user.loading);
