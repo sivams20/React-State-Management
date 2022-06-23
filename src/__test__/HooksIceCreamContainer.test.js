@@ -1,8 +1,9 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import configureMockStore from "redux-mock-store";
 import React from "react";
 import HooksIceCreamContainer from "../components/HooksIceCreamContainer";
 import { Provider } from "react-redux";
+import { buyIceCream } from "../redux";
 
 const mockStore = configureMockStore();
   const store = mockStore({iceCream: {
@@ -11,6 +12,10 @@ const mockStore = configureMockStore();
 });
 
 describe('HooksIceCreamContainer unit testing.', ()=>{
+
+    beforeEach(()=>{
+        store.dispatch = jest.fn();
+    });
     afterEach(cleanup);
 
     test('Should load without crash', () => {
@@ -32,6 +37,15 @@ describe('HooksIceCreamContainer unit testing.', ()=>{
         render(<Provider store={store}><HooksIceCreamContainer/></Provider>);
         const div = await waitFor(() => screen.findByTestId('numIcecream'));
         expect(div).toHaveTextContent('20');
+    });
+
+    test('Should dispatch action on button click', async () => {
+        render(<Provider store={store}><HooksIceCreamContainer/></Provider>);
+        const buyButton = await waitFor(() => screen.findByTestId('buyIce'));
+        expect(buyButton).toHaveTextContent('Buy Ice Cream');
+        await fireEvent.click(buyButton);
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(store.dispatch).toHaveBeenCalledWith(buyIceCream());
     });
 
 });

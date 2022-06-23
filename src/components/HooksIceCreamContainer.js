@@ -9,7 +9,7 @@ function HooksIceCreamContainer(){
     return(
         <div>
             <h2>Number of IceCreams - <span data-testid="numIcecream">{numberOfIceCream}</span></h2>
-            <button onClick={()=> dispatch(buyIceCream())}>Buy Ice Cream</button>
+            <button onClick={()=> dispatch(buyIceCream())} data-testid="buyIce">Buy Ice Cream</button>
         </div>
     )
 }

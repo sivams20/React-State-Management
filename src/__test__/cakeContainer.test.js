@@ -1,8 +1,9 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
 import CakeContainer from '../components/cakeContainer';
+import { buyCake } from '../redux';
 
 const mockStore = configureMockStore();
   const store = mockStore({cake: {
@@ -12,6 +13,9 @@ const mockStore = configureMockStore();
 
 describe('CakeContainer Component', () => {
 
+  beforeEach(()=>{
+    store.dispatch = jest.fn();
+  });
   afterEach(cleanup);
 
   test('should load without crash', () => {
@@ -30,12 +34,17 @@ describe('CakeContainer Component', () => {
 
   test('Check the cakes available', async () => {
     render(<Provider store={store}><CakeContainer/></Provider>);
-    // const numOfCakes = screen.getByTestId('numcakes');
-    // expect(numOfCakes).toHaveTextContent('10');
-    //const div = await waitFor(() => getByTestId('numCakes'));
-    //const div = await screen.findByTestId('numCakes');
     const div = await waitFor(() => screen.findByTestId('numCakes'));
     expect(div).toHaveTextContent('10');
+  });
+
+  test('Should dispatch action on button click', async () => {
+    render(<Provider store={store}><CakeContainer/></Provider>);
+    const buyButton = await waitFor(() => screen.findByTestId('buyCake'));
+    expect(buyButton).toHaveTextContent('Buy Cake');
+    await fireEvent.click(buyButton);
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
+    expect(store.dispatch).toHaveBeenCalledWith(buyCake());
   });
   
 });
