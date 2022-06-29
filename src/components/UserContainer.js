@@ -16,7 +16,7 @@ function UserContainer(){
 
     return(
         <div>
-            {loading && <div>Loading...</div>}
+            {loading && <div data-testid="loading">Loading...</div>}
             {users && users.map((user) =>
                 <div key={user.id}>
                 {user.name}
